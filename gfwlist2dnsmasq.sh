@@ -101,8 +101,8 @@ check_depends(){
 
 get_args(){
     OUT_TYPE='DNSMASQ_RULES'
-    DNS_IP='127.0.0.1'
-    DNS_PORT='5353'
+    DNS_IP='8.8.8.8'
+    DNS_PORT='53'
     IPSET_NAME=''
     FILE_FULLPATH=''
     CURL_EXTARG=''
@@ -283,11 +283,20 @@ process(){
     # Convert domains into dnsmasq rules
         if [ $WITH_IPSET -eq 1 ]; then
             _green 'Ipset rules included.'
-            sort -u $DOMAIN_FILE | $SED_ERES 's#(.+)#server=/\1/'$DNS_IP'\#'$DNS_PORT'\
+            if [ $DNS_PORT -eq 53 ]; then
+                sort -u $DOMAIN_FILE | $SED_ERES 's#(.+)#server=/\1/'$DNS_IP'\
 ipset=/\1/'$IPSET_NAME'#g' > $CONF_TMP_FILE
+            else
+                sort -u $DOMAIN_FILE | $SED_ERES 's#(.+)#server=/\1/'$DNS_IP'\#'$DNS_PORT'\
+ipset=/\1/'$IPSET_NAME'#g' > $CONF_TMP_FILE
+            fi
         else
             _green 'Ipset rules not included.'
-            sort -u $DOMAIN_FILE | $SED_ERES 's#(.+)#server=/\1/'$DNS_IP'\#'$DNS_PORT'#g' > $CONF_TMP_FILE
+            if [ $DNS_PORT -eq 53 ]; then
+                sort -u $DOMAIN_FILE | $SED_ERES 's#(.+)#server=/\1/'$DNS_IP'#g' > $CONF_TMP_FILE
+            else
+                sort -u $DOMAIN_FILE | $SED_ERES 's#(.+)#server=/\1/'$DNS_IP'\#'$DNS_PORT'#g' > $CONF_TMP_FILE
+            fi
         fi
 
         # Generate output file
