@@ -36,9 +36,9 @@ Website:     https://github.com/cokebar
 Usage: sh gfwlist2dnsmasq.sh [options] -o FILE
 Valid options are:
     -d, --dns <dns_ip>
-                DNS IP address for the GfwList Domains (Default: 127.0.0.1)
+                DNS IP address for the GfwList Domains (Default: 8.8.8.8)
     -p, --port <dns_port>
-                DNS Port for the GfwList Domains (Default: 5353)
+                DNS Port for the GfwList Domains (Default: 53)
     -s, --ipset <ipset_name>
                 Ipset name for the GfwList domains
                 (If not given, ipset rules will not be generated.)
